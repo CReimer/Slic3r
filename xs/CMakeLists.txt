@@ -65,3 +65,6 @@ else ()
     file(GLOB MyGlew src/glew/src/*.c)
     target_sources(XS PRIVATE ${MyGlew})
 endif ()
+
+install(TARGETS XS DESTINATION lib/slic3r-prusa3d/auto/Slic3r)
+install(FILES lib/Slic3r/XS.pm DESTINATION slic3r-prusa3d/Slic3r/XS.pm)
