@@ -3,7 +3,9 @@ list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/modules/)
 set(MyXsC "${CMAKE_CURRENT_BINARY_DIR}/XS.cpp")
 add_custom_command(
         OUTPUT ${MyXsC}
-        COMMAND bash ${CMAKE_CURRENT_LIST_DIR}/generate_xs.sh ${CMAKE_CURRENT_LIST_DIR} ${CMAKE_CURRENT_BINARY_DIR}
+        DEPENDS xsp/*.xsp
+        BYPRODUCTS ${CMAKE_CURRENT_BINARY_DIR}/main.xs ${CMAKE_CURRENT_BINARY_DIR}/typemap
+        COMMAND ${CMAKE_COMMAND} -P ${PROJECT_SOURCE_DIR}/cmake/modules/GenerateXsCpp.cmake
 )
 
 file(GLOB MySrc src/*.cpp)
@@ -29,6 +31,8 @@ endif ()
 find_package(Eigen3 REQUIRED)
 if (Eigen3_FOUND)
     include_directories(${EIGEN3_INCLUDE_DIR})
+else ()
+    include_directories(src/eigen)
 endif ()
 
 find_package(TBB REQUIRED)
@@ -42,6 +46,9 @@ find_package(EXPAT REQUIRED)
 if (EXPAT_FOUND)
     include_directories(${EXPAT_INCLUDE_DIRS})
     target_link_libraries(XS ${EXPAT_LIBRARIES})
+else ()
+    file(GLOB MyExpat src/expat/*.c)
+    target_sources(XS PRIVATE ${MyExpat})
 endif ()
 
 find_package(Boost REQUIRED COMPONENTS system thread log)
@@ -54,4 +61,7 @@ find_package(GLEW REQUIRED)
 if (GLEW_FOUND)
     include_directories(${GLEW_INCLUDE_DIRS})
     target_link_libraries(XS ${GLEW_LIBRARIES})
+else ()
+    file(GLOB MyGlew src/glew/src/*.c)
+    target_sources(XS PRIVATE ${MyGlew})
 endif ()
