@@ -51,7 +51,7 @@ else ()
     target_sources(XS PRIVATE ${MyExpat})
 endif ()
 
-find_package(Boost REQUIRED COMPONENTS system thread log)
+find_package(Boost REQUIRED COMPONENTS system filesystem thread log)
 if (Boost_FOUND)
     include_directories(${Boost_INCLUDE_DIRS})
     target_link_libraries(XS ${Boost_LIBRARIES})
