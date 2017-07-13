@@ -1,11 +1,26 @@
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/modules/)
 
+
+find_package(Perl)
+set(MyTypemap ${CMAKE_CURRENT_BINARY_DIR}/typemap)
+add_custom_command(
+        OUTPUT ${MyTypemap}
+        COMMAND ${PERL_EXECUTABLE} -MExtUtils::Typemaps -MExtUtils::Typemaps::Basic -e "$typemap = ExtUtils::Typemaps->new(file => \"${CMAKE_CURRENT_LIST_DIR}/xsp/my.map\"); $typemap->merge(typemap => ExtUtils::Typemaps::Basic->new); $typemap->write(file => \"${MyTypemap}\")"
+        VERBATIM
+)
+
+set(MyTemplate ${CMAKE_CURRENT_BINARY_DIR}/template.xs)
+file(GLOB files xsp/*.xsp)
+foreach (file ${files})
+    set(INCLUDE_COMMANDS "${INCLUDE_COMMANDS}INCLUDE_COMMAND: $^X -MExtUtils::XSpp::Cmd -e xspp -- -t \"${CMAKE_CURRENT_LIST_DIR}/xsp/typemap.xspt\" \"${file}\"\n")
+endforeach ()
+configure_file(template.xs.in ${MyTemplate} @ONLY)
+
 set(MyXsC "${CMAKE_CURRENT_BINARY_DIR}/XS.cpp")
 add_custom_command(
         OUTPUT ${MyXsC}
-        DEPENDS xsp/*.xsp
-        BYPRODUCTS ${CMAKE_CURRENT_BINARY_DIR}/main.xs ${CMAKE_CURRENT_BINARY_DIR}/typemap
-        COMMAND ${CMAKE_COMMAND} -P ${PROJECT_SOURCE_DIR}/cmake/modules/GenerateXsCpp.cmake
+        DEPENDS ${MyTemplate} ${MyTypemap}
+        COMMAND COMMAND xsubpp -typemap typemap -output ${MyXsC} -hiertype ${MyTemplate}
 )
 
 file(GLOB MySrc src/*.cpp)

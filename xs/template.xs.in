@@ -19,3 +19,4 @@ extern "C" {
 
 MODULE = Slic3r::XS	PACKAGE = Slic3r::XS
 
+@INCLUDE_COMMANDS@
