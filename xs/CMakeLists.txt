@@ -39,7 +39,10 @@ add_library(XS SHARED ${MyXsC} ${MySrc} ${MyAdmesh} ${MyGuiSrc} ${MyLibSlic3rSrc
 find_package(PerlLibs)
 target_include_directories(XS PRIVATE ${PERL_INCLUDE_PATH} src src/libslic3r )
 
-target_compile_definitions(XS PRIVATE -DSLIC3RXS -DBOOST_ASIO_DISABLE_KQUEUE -DSLIC3R_GUI -DSLIC3R_PRUS -DBOOST_LOG_DYN_LINK -DBOOST_LIBS -DNDEBUG -D_USE_MATH_DEFINES)
+target_compile_definitions(XS PRIVATE -DSLIC3RXS -DBOOST_ASIO_DISABLE_KQUEUE -DSLIC3R_GUI -DSLIC3R_PRUS -DBOOST_LOG_DYN_LINK -DBOOST_LIBS -DNDEBUG)
+if(WIN32)
+	target_compile_definitions(XS PRIVATE  -D_USE_MATH_DEFINES -DNOGDI -DNOMINMAX -D_WIN32 -DHAS_BOOL)
+endif()
 set_target_properties(XS PROPERTIES PREFIX "")
 
 find_package(wxWidgets REQUIRED)
@@ -85,6 +88,7 @@ else ()
     file(GLOB MyGlew src/glew/src/*.c)
 	include_directories(src/glew/include)
     target_sources(XS PRIVATE ${MyGlew})
+	target_compile_definitions(XS PRIVATE -DGLEW_STATIC)
 endif ()
 
 install(TARGETS XS DESTINATION lib/slic3r-prusa3d/auto/Slic3r)
