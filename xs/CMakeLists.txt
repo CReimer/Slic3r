@@ -37,7 +37,7 @@ set(MyXsC "${CMAKE_CURRENT_BINARY_DIR}/XS.cpp")
 add_custom_command(
         OUTPUT ${MyXsC}
         DEPENDS ${MyTemplate} ${MyTypemap}
-        COMMAND COMMAND xsubpp -typemap typemap -output ${MyXsC} -hiertype ${MyTemplate}
+        COMMAND COMMAND xsubpp -typemap typemap -output ${MyXsC} -hiertype ${MyMainXs}
 )
 
 # Find and define all source files
