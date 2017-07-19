@@ -152,5 +152,10 @@ else ()
 endif ()
 
 # Installation
+<<<<<<< HEAD
 install(TARGETS XS DESTINATION lib/slic3r-prusa3d/auto/Slic3r)
 install(FILES lib/Slic3r/XS.pm DESTINATION slic3r-prusa3d/Slic3r/XS.pm)
+=======
+install(TARGETS XS DESTINATION lib/slic3r-prusa3d/auto/Slic3r/XS)
+install(FILES lib/Slic3r/XS.pm DESTINATION lib/slic3r-prusa3d/Slic3r)
+>>>>>>> 64d538fc... Fix installation path for XS libraries
