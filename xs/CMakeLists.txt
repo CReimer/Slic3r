@@ -151,5 +151,5 @@ else ()
 endif ()
 
 # Installation
-install(TARGETS XS DESTINATION lib/slic3r/auto/Slic3r)
-install(FILES lib/Slic3r/XS.pm DESTINATION slic3r/Slic3r/XS.pm)
+install(TARGETS XS DESTINATION lib/slic3r/auto/Slic3r/XS)
+install(FILES lib/Slic3r/XS.pm DESTINATION lib/slic3r/Slic3r)
